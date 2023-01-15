@@ -27,7 +27,7 @@ function productsItems() {
                 itemsAnchor.onclick = () => {
 
                 
-                localStorage.setItem("_id", product._id);
+                localStorage.setItem("product", JSON.stringify(product));
 }
                 // create element article
                 let itemsArticle = document.createElement("article");
