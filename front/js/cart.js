@@ -1,79 +1,29 @@
-// const local = JSON.parse(localStorage.getItem("cart"));    
-// const article = document.getElementById("cart__items");
-// const cartName = document.getElementById("cartName"); 
-// const cartColor = document.getElementById("cartColor"); 
-// const cartPrice = document.getElementById("cartPrice"); 
-// const cartQuantity = document.getElementById("cartQuantity"); 
-// const cartTotal = document.getElementById("totalQuantity"); 
-// const cartTotalPrice = document.getElementById("totalPrice"); 
-// const cartImage = document.getElementById("itemsImg"); 
-// const cartDelete = document.getElementById("deleteItem"); 
-// // si le panier est vide
-// if(local === null) {
-//     console.log ("panier vide");
-// }
-// else {
-//     let structure = [];
-//     for (let i = 0; i < local.length; i++) {
-//         newOne = local[i];
-
-
-// cartQuantity.addEventListener ("change", function() {
-// cartTotalPrice.textContent = `${cartQuantity.value * local[i][1]}`;
-// cartTotal.textContent = cartQuantity.value + cartQuantity.textContent;
-
-// // location.reload()
-// }
-
-// )
-// cartDelete.addEventListener("click", function() {cartTotal.textContent = 0; cartTotalPrice.textContent = 0 
-
-// })
-// if( i == local.length) {
-//     local = structure
-// }
-
-// }
-
-// }
-
-
 const article = document.getElementById("cart__items");
-const cartName = document.getElementById("cartName"); 
-const cartColor = document.getElementById("cartColor"); 
-const cartPrice = document.getElementById("cartPrice"); 
-const cartQuantity = document.getElementById("cartQuantity"); 
-const cartTotal = document.getElementById("totalQuantity"); 
-const cartTotalPrice = document.getElementById("totalPrice"); 
-const cartImage = document.getElementById("itemsImg"); 
+// const cartName = document.getElementById("cartName");
+// const cartColor = document.getElementById("cartColor");
+// const cartPrice = document.getElementById("cartPrice");
+const cartQuantity = document.querySelectorAll("itemQuantity");
+const cartTotal = document.getElementById("totalQuantity");
+const cartTotalPrice = document.getElementById("totalPrice");
+const cartImage = document.getElementById("itemsImg");
 
-
-
-const local = JSON.parse(localStorage.getItem("cart"));  
+let cart = JSON.parse(localStorage.getItem("cart"));
 let main = document.getElementById("cart__items");
 
+if (cart != 0) {
+  let structure = [];
 
+  for (i = 0; i < cart.length; i++) {
+    cartImage.src = `${cart[i].image}`;
 
-// main.innerHTML = codeAll;
+    cartName.textContent = `${cart[i].name}`;
 
-if(local != null) {
+    cartColor.textContent = `${cart[i].color}`;
+    cartPrice.textContent = `${cart[i].price}` + " €";
+    cartQuantity.value = `${cart[i].quantity}`;
 
-    let structure = [];
-
-for(i = 0; i < local.length; i++) {
-
-
-    cartImage.src = `${local[i][4]}`;
-
-    cartName.textContent = `${local[i][0]}`;
-    
-    cartColor.textContent = `${local[i][2]}`;
-    cartPrice.textContent = `${local[i][1]}` + " €";
-    cartQuantity.value = `${local[i][3]}`;
-    
-    cartTotal.textContent = `${local[i][3]}`;
-    cartTotalPrice.textContent = `${cartQuantity.value * local[i][1]}`;
-
+    cartTotal.textContent = `${cart[i].quantity}`;
+    cartTotalPrice.textContent = `${cartQuantity.value * cart[i].price}`;
 
     let codeAll = `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
         <div class="cart__item__img">
@@ -95,55 +45,62 @@ for(i = 0; i < local.length; i++) {
             </div>
           </div>
         </div>
-      </article> ` ;
-      
- 
+      </article> `;
 
-structure = structure + `${codeAll}`;
+    structure = structure + `${codeAll}`;
 
 
+    // let cartDelete = document.querySelectorAll(".deleteItem")[i];
 
-}
-    if(i === local.length ) {
-        main.innerHTML = structure;
-    }
+    //   cartDelete.addEventListener("click", function () {
+    //     // delete local[i];
+  
+    //     console.log("test");
+    //   });
 
-    for(let k = 0; k < local.length; k++) {
-    let cartDelete = document.querySelectorAll(".deleteItem")[k]; 
-    
-    // cartDelete.addEventListener("click", local[k].splice(0, 1));
-    // cartDelete.addEventListener("click", function() {console.log(local)});
-    // cartDelete.addEventListener("click", function() {local.filter(function(){
-    //     return local[k-1];
-        
-    // });
-    // console.log(local[k][1])});
 
-    
-//     cartDelete.addEventListener("click", function() { local.shift()
+  }
+
+  if (i === cart.length) {
+    main.innerHTML = structure;
+  }
+  
+
+  for (let k = 0; k < cart.length; k++) {
+    console.log(cart[k]);
+    let cartDelete = document.querySelectorAll(".deleteItem")[k];
       
 
-// console.log(local)});
-
-cartDelete.addEventListener("click", function() { delete local[k]
-      
-
-  console.log(local)});
-
-  reload()
-
-    
-    let itemQuantity = document.querySelectorAll(".itemQuantity")[k];
-    itemQuantity.addEventListener ("change", function() {
-      console.log("test");
-     cartTotalPrice.textContent = `${cartQuantity.value[k] * local[i][1]}`;
-     cartTotal.textContent = cartQuantity.value + cartQuantity.textContent;
-     })
-    }
+  cartDelete.addEventListener("click", function () {
    
-    
- } else {
-console.log ("panier vide");
-main.innerHTML = `<div> <p> Votre panier est vide </p> </div>`;
- }
+      const index = cart.indexOf(cart[k]);
+      if (index > -1) {
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        cart = JSON.parse(localStorage.getItem("cart"));
+        console.log(index);
+        
 
+    
+              
+
+console.log(cart);}})}
+
+      // localStorage.setItem("local", JSON.stringify(local));
+      // console.log(local);
+    }
+
+  //   cartQuantity.value = `${local[k].quantity}`;
+
+  //   let itemQuantity = document.querySelectorAll(".itemQuantity")[k];
+  //   itemQuantity.addEventListener("change", function () {
+  //     console.log("test");
+  //     cartTotalPrice.textContent = `${cartQuantity.value[k] * local[k].price}`;
+  //     cartTotal.textContent = cartQuantity.value + cartQuantity.textContent;
+  //   });
+  // }
+  else  {
+   
+  console.log("panier vide");
+  main.innerHTML = `<div> <p> Votre panier est vide </p> </div>`;
+  }

@@ -1,5 +1,5 @@
 
-productsItems();
+
 
 function productsItems() {
     fetch("http://localhost:3000/api/products")
@@ -24,11 +24,11 @@ function productsItems() {
                 
 
                 itemsSection.appendChild(itemsAnchor);
-                itemsAnchor.onclick = () => {
+//                 itemsAnchor.onclick = () => {
 
                 
-                localStorage.setItem("product", JSON.stringify(product));
-}
+//                 localStorage.setItem("product", JSON.stringify(product));
+// }
                 // create element article
                 let itemsArticle = document.createElement("article");
                 itemsAnchor.appendChild(itemsArticle);
@@ -58,3 +58,4 @@ function productsItems() {
             console.log(err);
         });
 }
+productsItems();
