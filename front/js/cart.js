@@ -1,8 +1,4 @@
 const article = document.getElementById("cart__items");
-// const cartName = document.getElementById("cartName");
-// const cartColor = document.getElementById("cartColor");
-// const cartPrice = document.getElementById("cartPrice");
-// const cartQuantity = document.querySelectorAll(".itemQuantity");
 const cartTotal = document.getElementById("totalQuantity");
 const cartTotalPrice = document.getElementById("totalPrice");
 const cartImage = document.getElementById("itemsImg");
@@ -19,7 +15,7 @@ if (cart != 0) {
     cartName.textContent = `${cart[i].name}`;
 
     cartColor.textContent = `${cart[i].color}`;
-    cartPrice.textContent = `${cart[i].price}` + " €";
+    cartPrice.textContent = `${cart[i].price}`;
     cartQuantity.value = `${cart[i].quantity}`;
 
     cartTotal.textContent = `${cart[i].quantity}`;
@@ -33,7 +29,7 @@ if (cart != 0) {
           <div class="cart__item__content__description">
             <h2 >${cartName.textContent}</h2>
             <p >${cartColor.textContent}</p>
-            <p class="priceNew">${cartPrice.textContent} </p>
+            <p class="priceNew">${cartPrice.textContent} € </p>
           </div>
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
@@ -59,6 +55,24 @@ if (cart != 0) {
     main.innerHTML = structure;
   }
 
+  // function totalPrice (before change)
+  function totalPrice1() {
+    let arr = document.querySelectorAll(".priceNew");
+
+    let tot = 0;
+    for (let v = 0; v < arr.length; v++) {
+      let priceContent = arr[v].textContent;
+      let priceWithoutEuros = priceContent.slice(0, -2);
+      if (Number(priceWithoutEuros)) tot += parseFloat(priceWithoutEuros);
+    }
+    console.log(tot);
+    cartTotalPrice.innerText = tot;
+  }
+
+  totalPrice1();
+
+  // quantity of the item in the cart (before change)
+
   function totalQuantity1() {
     let arr = document.querySelectorAll(".itemQuantity");
     let tot = 0;
@@ -70,6 +84,8 @@ if (cart != 0) {
   }
 
   totalQuantity1();
+
+  // delete item from cart
 
   for (let k = 0; k < cart.length; k++) {
     console.log(cart[k]);
@@ -93,29 +109,20 @@ if (cart != 0) {
     itemQuantity.addEventListener("change", function () {
       console.log("test");
 
-      // quantity of the item in the cart
+      // quantity of the item in the cart (after change)
       const itemQuantity = document.querySelectorAll(".itemQuantity")[k].value;
 
       let numQuantity = Number(itemQuantity);
 
       console.log(numQuantity);
 
-      //  multiply price
+      //  multiply price (after change)
       let cartTotalPrice1 = `${numQuantity * cart[k].price}`;
       console.log(cartTotalPrice1);
       let priceNew = document.querySelectorAll(".priceNew")[k];
-      priceNew.innerText = `${cartTotalPrice1}`;
+      priceNew.innerText = `${cartTotalPrice1} €`;
 
-      //   for (let j = 0; j < priceNew; j++) {
-
-      //     let cartTotalPrice1 = `${numQuantity * cart[k].price}`;
-      //   }
-      //   console.log(cartTotalPrice1);
-      //   cartTotal.innerText = tot;
-      // }
-
-      // total quantity
-
+      //totalQuantity (after change)
       function totalQuantity() {
         let arr = document.querySelectorAll(".itemQuantity");
         let tot = 0;
@@ -127,9 +134,22 @@ if (cart != 0) {
       }
 
       totalQuantity();
-    });
 
-    // cartTotalPrice.textContent = `${cartQuantity.cart[k] * cart[k].price}`;
+      function totalPrice() {
+        let arr = document.querySelectorAll(".priceNew");
+
+        let tot = 0;
+        for (let v = 0; v < arr.length; v++) {
+          let priceContent = arr[v].textContent;
+          let priceWithoutEuros = priceContent.slice(0, -2);
+          if (Number(priceWithoutEuros)) tot += parseFloat(priceWithoutEuros);
+        }
+        console.log(tot);
+        cartTotalPrice.innerText = tot;
+      }
+
+      totalPrice();
+    });
   }
 } else {
   console.log("panier vide");
