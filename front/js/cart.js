@@ -2,7 +2,7 @@ const article = document.getElementById("cart__items");
 // const cartName = document.getElementById("cartName");
 // const cartColor = document.getElementById("cartColor");
 // const cartPrice = document.getElementById("cartPrice");
-const cartQuantity = document.querySelectorAll("itemQuantity");
+// const cartQuantity = document.querySelectorAll(".itemQuantity");
 const cartTotal = document.getElementById("totalQuantity");
 const cartTotalPrice = document.getElementById("totalPrice");
 const cartImage = document.getElementById("itemsImg");
@@ -49,16 +49,6 @@ if (cart != 0) {
 
     structure = structure + `${codeAll}`;
 
-
-    // let cartDelete = document.querySelectorAll(".deleteItem")[i];
-
-    //   cartDelete.addEventListener("click", function () {
-    //     // delete local[i];
-  
-    //     console.log("test");
-    //   });
-
-
   }
 
   if (i === cart.length) {
@@ -69,7 +59,7 @@ if (cart != 0) {
   for (let k = 0; k < cart.length; k++) {
     console.log(cart[k]);
     let cartDelete = document.querySelectorAll(".deleteItem")[k];
-      
+      console.log("test")
 
   cartDelete.addEventListener("click", function () {
    
@@ -82,23 +72,24 @@ if (cart != 0) {
         window.location.reload();
 
     
-              
 
-console.log(cart);}})}
+console.log(cart);}})
+     
 
-      // localStorage.setItem("local", JSON.stringify(local));
-      // console.log(local);
-    }
+    // cartQuantity.value = Number(`${cart[k].quantity}`);
 
-  //   cartQuantity.value = `${local[k].quantity}`;
+    let itemQuantity = document.querySelectorAll(".itemQuantity")[k];
+    itemQuantity.addEventListener("change", function () {
+      console.log("test");
+    const cartQuantity = document.querySelectorAll(".itemQuantity")[k].value;
+    let numQuantity = parseInt(cartQuantity);
 
-  //   let itemQuantity = document.querySelectorAll(".itemQuantity")[k];
-  //   itemQuantity.addEventListener("change", function () {
-  //     console.log("test");
-  //     cartTotalPrice.textContent = `${cartQuantity.value[k] * local[k].price}`;
-  //     cartTotal.textContent = cartQuantity.value + cartQuantity.textContent;
-  //   });
-  // }
+
+      // cartTotalPrice.textContent = `${cartQuantity.cart[k] * cart[k].price}`;
+      // cartTotal.innerText += sumQuantity;
+      console.log(numQuantity);
+    });
+  }}
   else  {
    
   console.log("panier vide");
