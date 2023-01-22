@@ -79,7 +79,7 @@ if (cart != 0) {
         localStorage.setItem('cart', JSON.stringify(cart));
         cart = JSON.parse(localStorage.getItem("cart"));
         console.log(index);
-        
+        window.location.reload();
 
     
               
