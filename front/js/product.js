@@ -53,6 +53,12 @@ function productsItems() {
                         
                         const cart = JSON.parse(localStorage.getItem('cart')) ?? [];
                         
+                        // condition to add same id & color
+                        let foundProduct = cart.find(p => p.id == product._id && p.color == listNew[selectedElement]) ;
+                        if(foundProduct  != undefined){
+                            foundProduct.quantity++;
+                        }else{
+                            
                         cart.push({
                             id: product._id,
                             name: product.name,
@@ -61,6 +67,10 @@ function productsItems() {
                             price: product.price,
                             image: product.imageUrl,
                         });
+                    
+                        }
+
+                        
                          localStorage.setItem("cart", JSON.stringify(cart));
                         console.log(cart);
                        

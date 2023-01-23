@@ -1,25 +1,25 @@
+// get elements from HTML
+
 const article = document.getElementById("cart__items");
+let main = document.getElementById("cart__items");
+
 const cartTotal = document.getElementById("totalQuantity");
 const cartTotalPrice = document.getElementById("totalPrice");
 const cartImage = document.getElementById("itemsImg");
 
+// get cart from local storage
 let cart = JSON.parse(localStorage.getItem("cart"));
-let main = document.getElementById("cart__items");
 
+// loop to regenerate elements
 if (cart != 0) {
   let structure = [];
 
   for (i = 0; i < cart.length; i++) {
     cartImage.src = `${cart[i].image}`;
-
-    cartName.textContent = `${cart[i].name}`;
-
-    cartColor.textContent = `${cart[i].color}`;
-    cartPrice.textContent = `${cart[i].price}`;
-    cartQuantity.value = `${cart[i].quantity}`;
-
-    cartTotal.textContent = `${cart[i].quantity}`;
-    // cartTotalPrice.textContent = `${cartQuantity.value * cart[i].price}`;
+    cartName = `${cart[i].name}`;
+    cartColor = `${cart[i].color}`;
+    cartPrice = `${cart[i].price}`;
+    cartQuantity = `${cart[i].quantity}`;
 
     let codeAll = `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
         <div class="cart__item__img">
@@ -27,14 +27,14 @@ if (cart != 0) {
         </div>
         <div class="cart__item__content">
           <div class="cart__item__content__description">
-            <h2 >${cartName.textContent}</h2>
-            <p >${cartColor.textContent}</p>
-            <p class="priceNew">${cartPrice.textContent} € </p>
+            <h2 >${cartName}</h2>
+            <p >${cartColor}</p>
+            <p class="priceNew">${cartPrice * cartQuantity} € </p>
           </div>
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
               <p >Qté : </p>
-              <input id="cartQuantity" type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${cartQuantity.value}>
+              <input id="cartQuantity" type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${cartQuantity}>
             </div>
             <div class="cart__item__content__settings__delete">
               <p id="deleteItem" class="deleteItem">Supprimer</p>
@@ -42,19 +42,15 @@ if (cart != 0) {
           </div>
         </div>
         <div>
-        
         <div>
-
-
       </article> `;
-
     structure = structure + `${codeAll}`;
   }
 
+  //   put the loop in HTML
   if (i === cart.length) {
     main.innerHTML = structure;
   }
-
   // function totalPrice (before change)
   function totalPrice1() {
     let arr = document.querySelectorAll(".priceNew");
@@ -156,3 +152,29 @@ if (cart != 0) {
   main.innerHTML = `<div> <p> Votre panier est vide </p> </div>`;
   cartTotal.innerText = "0";
 }
+
+
+
+// Post
+let formSubmit = document.getElementById("order");
+formSubmit.addEventListener("click", function (event) {
+  event.preventDefault();
+  console.log("test2");
+  const form = [];
+form.push({
+  firstName: document.getElementById("firstName").value,
+  lastName: document.getElementById("lastName").value,
+  address: document.getElementById("address").value,
+  city: document.getElementById("city").value,
+  email: document.getElementById("email").value,
+});
+console.log(form);
+
+
+});
+
+
+
+
+
+// localStorage.setItem("form", JSON.stringify(form));
