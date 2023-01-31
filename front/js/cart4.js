@@ -157,7 +157,6 @@ if (cart != 0 && cart != null) {
   cartTotal.innerText = "0";
 }
 
-
 // Post
 // Validation inputs
 const validationFinal = {
@@ -167,7 +166,6 @@ const validationFinal = {
   city: false,
   email: false,
 };
-
 
 // Regex for mail
 const regexEmail = /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/;
@@ -191,7 +189,7 @@ errorMessagesCity.style.display = "none";
 
 const errorMessagesEmail = document.getElementById("emailErrorMsg");
 errorMessagesEmail.textContent = "Veuillez introduire votre email !";
-errorMessagesEmail.style.display = "none"; 
+errorMessagesEmail.style.display = "none";
 
 // form Data geted from html
 const firsName = document.getElementById("firstName");
@@ -200,101 +198,99 @@ const address = document.getElementById("address");
 const city = document.getElementById("city");
 const email = document.getElementById("email");
 
-
 // validation inputs
 function validationUser() {
-    const inputs = [firsName, lastName, address, city, email];
-    const errorMessages = [
-        errorMessagesFirst,
-        errorMessagesLast,
-        errorMessagesAddress,
-        errorMessagesCity,
-        errorMessagesEmail,
-    ];
-    const conditions = [
-        (input) => input.value.length < 2,
-        (input) => input.value.length < 2,
-        (input) => input.value.length < 5,
-        (input) => input.value.length < 2,
-        (input) => !regexEmail.test(input.value),
-    ];
-    inputs.forEach((input, index) => {
-      if (conditions[index](input)) {
-          errorMessages[index].style.display = "block";
-          validationFinal[inputs[index].name] = false;
-      } else {
-          errorMessages[index].style.display = "none";
-          validationFinal[inputs[index].name] = true;
-      }
+  const inputs = [firsName, lastName, address, city, email];
+  const errorMessages = [
+    errorMessagesFirst,
+    errorMessagesLast,
+    errorMessagesAddress,
+    errorMessagesCity,
+    errorMessagesEmail,
+  ];
+  const conditions = [
+    (input) => input.value.length < 2,
+    (input) => input.value.length < 2,
+    (input) => input.value.length < 5,
+    (input) => input.value.length < 2,
+    (input) => !regexEmail.test(input.value),
+  ];
+  inputs.forEach((input, index) => {
+    if (conditions[index](input)) {
+      errorMessages[index].style.display = "block";
+      validationFinal[inputs[index].name] = false;
+    } else {
+      errorMessages[index].style.display = "none";
+      validationFinal[inputs[index].name] = true;
+    }
   });
-} 
+}
 
 // form button
 let formSubmit = document.getElementById("order");
 
 // form submit with validation
 formSubmit.addEventListener("click", function (event) {
-    event.preventDefault();
-    console.log("test2");
-    if (validationFinal.firstName === true && validationFinal.lastName === true && validationFinal.address === true && validationFinal.city === true && validationFinal.email === true) {
-        console.log("test true validationFinal");
-        
+  event.preventDefault();
+  console.log("test2");
+  if (
+    validationFinal.firstName === true &&
+    validationFinal.lastName === true &&
+    validationFinal.address === true &&
+    validationFinal.city === true &&
+    validationFinal.email === true
+  ) {
+    console.log("test true validationFinal");
+
+    // form infos
+    let form = {
+      firstName: firsName.value,
+      lastName: lastName.value,
+      address: address.value,
+      city: city.value,
+      email: email.value,
+    };
+
+    // Product infos
+    const productPushCart = [];
+    const productPush = cart.map((cart) => {
+      productPushCart.push(cart.id);
+    });
+
+    productPush;
+
+    const order = {
+      contact: {
         // form infos
-        let form = {
-          firstName: firsName.value,
-          lastName: lastName.value,
-          address: address.value,
-          city: city.value,
-          email: email.value,
-      } ;
-        // const formPush = form.push({ contact: {
-        //     firstName: firsName.value,
-        //     lastName: lastName.value,
-        //     address: address.value,
-        //     city: city.value,
-        //     email: email.value,
-        // }});
+        firstName: firsName.value,
+        lastName: lastName.value,
+        address: address.value,
+        city: city.value,
+        email: email.value,
+      },
+      products: productPushCart,
+    };
 
-    let formVariable;
-    let productVariables;
+    console.log("order", JSON.stringify(order));
 
-      
-   // Product infos
-   const productPushCart = [];
-   const productPush = cart.map((cart) => {
-       productPushCart.push(
-        cart.id
-       );
-   });
+    console.log("order", JSON.stringify(order));
 
-
-
-   
-        
-        productPush;
-        console.log(formVariable);
-        const commande = {
-          formVariable,
-          productVariables
-      };
-      console.log("{Contact:" + ("form", JSON.stringify(form)), "products:" + ("productPushCart", JSON.stringify(productPushCart) + "}"
-      ) );
-        // window.location.reload();
-
-    } else {
-        console.log("test false validationFinal"); 
-        validationUser(); //display error messages
-    }
-  });
-
-
-  // const commande = {
-  //   contact: {
-  //       firstName: "",
-  //       lastName: "",
-  //       address: "",
-  //       city: "",
-  //       email: email,
-  //   },
-  //   products: ["ghjdqsghjgdhjsgjhdqs", "gghjghjghjgjhgjh"],
-  //   };
+    // POST Method
+    const options = {
+      method: "POST",
+      body: JSON.stringify(order),
+    };
+    let url = "http://localhost:3000/api/products/order";
+    fetch(url, options)
+      .then((res) => res.json())
+      .then((order) => {
+        console.log("data", order);
+        localStorage.setItem("orderId", JSON.stringify(order));
+        // localStorage.setItem("totalPrice", cartTotalPrice.innerText);
+        document.location.href = "confirmation.html";
+      });
+  } else {
+    console.log("test false validationFinal");
+    validationUser(); //display error messages
+  }
+});
