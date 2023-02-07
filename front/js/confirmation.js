@@ -1,9 +1,8 @@
-let order = JSON.parse(localStorage.getItem("orderId"));
-
-let id = document.getElementById("orderId");
-
+let order = localStorage.getItem("orderId");
 console.log("order", JSON.stringify(order))
 
 
-idRandom = String(Math.random()); 
-id.innerText = Number (idRandom.slice(2, 14));
+
+let id = document.getElementById("orderId");
+id.innerText = order;
+localStorage.clear();
