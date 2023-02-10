@@ -2,7 +2,6 @@
 const params = new URLSearchParams(document.location.search);
 const localId = params.get("id");
 
-// teeeeeeeeeeeeeeeeeest
 
 function productsItems() {
   fetch("http://localhost:3000/api/products")
@@ -19,6 +18,9 @@ function productsItems() {
         // add colors
 
         if (product._id === localId) {
+          // let itemContentAddButton = document.querySelector(".item__content__addButton");
+          // let addedProductMessage = document.createElement('addedProductMessage')
+          // itemContentAddButton.appendChild(addedProductMessage);
           const nameId = document.getElementById("title");
           const priceId = document.getElementById("price");
           const idDescription = document.getElementById("description");
@@ -62,6 +64,7 @@ function productsItems() {
                     quantity: Number(elementQuantity.value),
                   });
                   alert("Produit ajouté au panier");
+                  // addedProductMessage.innerHtml = `<div> Produit ajouté au panier </div>`;
                 }
                 localStorage.setItem("cart", JSON.stringify(cart));
                 console.log(cart);
@@ -72,6 +75,6 @@ function productsItems() {
       });
     });
 }
-// teeeeeeeeeeeeeeeeeeeeeest
+
 
 productsItems();

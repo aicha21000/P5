@@ -1,5 +1,5 @@
 // get elements from HTML
-const main = document.getElementById("cart__items"); 
+const main = document.getElementById("cart__items");
 const cartTotal = document.getElementById("totalQuantity");
 const cartTotalPrice = document.getElementById("totalPrice");
 
@@ -10,6 +10,7 @@ function saveCart(cart) {
 // get cart from local storage
 function getCart() {
   let cart = localStorage.getItem("cart");
+
   if (cart == null) {
     return []; //panier vide
   } else {
@@ -26,15 +27,16 @@ function getNumberProduct() {
   }
   return number;
 }
-// add total price
 function getTotalPrice() {
   let cart = getCart();
-  let total = 0;
+
   for (let product of cart) {
-    total += product.price * product.quantity;
+    let totalPriceUnity = [];
+    totalPriceUnity.push(product.quantity);
+    console.log(totalPriceUnity);
   }
-  return total;
 }
+getTotalPrice();
 
 //    button delete
 function deleteItem() {
@@ -65,14 +67,13 @@ function totalPrice() {
     if (Number(priceWithoutEuros)) totalPrice += parseFloat(priceWithoutEuros);
   }
 
-  cartTotalPrice.innerText = totalPrice;
+  cartTotalPrice.innerText = globalPrice;
   console.log(priceNew);
 }
+//global price variable declaration
+let globalPrice;
 
-
-  totalPrice();
-
-// Button change quantity
+// Change quantity
 function changeQuantity() {
   let cart = getCart();
   for (let i = 0; i < cart.length; i++) {
@@ -105,7 +106,7 @@ function changeQuantity() {
     });
   }
 }
-
+let totalPriceUnity;
 // Total quantity
 function totalQuantity() {
   let cart = getCart();
@@ -121,6 +122,7 @@ function getHtmlCode() {
   let cart = getCart();
 
   let structure = [];
+  let globalPriceArray = [];
   cart.forEach((element) => {
     fetch(`http://localhost:3000/api/products/${element.id}`)
       .then((res) => {
@@ -129,11 +131,8 @@ function getHtmlCode() {
         }
       })
       .then((product) => {
-
         let codeAll = `
-        <article class="cart__item" data-id="${product.id}" data-color="${
-          element.color
-        }">
+        <article class="cart__item" data-id="${product.id}" data-color="${element.color}">
           <div class="cart__item__img">
             <img id ="itemsImg" src=${product.imageUrl} alt="">
           </div>
@@ -141,14 +140,12 @@ function getHtmlCode() {
             <div class="cart__item__content__description">
               <h2 >${product.name}</h2>
               <p >${element.color}</p>
-              <p class="priceNew">${product.price * element.quantity} € </p>
+              <p class="priceNew">${product.price} € </p>
             </div>
             <div class="cart__item__content__settings">
               <div class="cart__item__content__settings__quantity">
                 <p >Qté : </p>
-                <input id="cartQuantity" type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${
-                  element.quantity
-                }>
+                <input id="cartQuantity" type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${element.quantity}>
               </div>
               <div class="cart__item__content__settings__delete">
                 <p id="deleteItem" class="deleteItem">Supprimer</p>
@@ -158,46 +155,55 @@ function getHtmlCode() {
         </article>
         `;
         structure += codeAll;
+
+        //put the price in an array
+        globalPriceArray.push(product.price * element.quantity);
+        //sum the price in the array
+        globalPrice = globalPriceArray.reduce(function (a, b) {
+          return a + b;
+        });
+
+        console.log(globalPrice);
+        totalPrice();
         main.innerHTML = structure;
         deleteItem();
         changeQuantity();
         cartTotal.innerText = getNumberProduct();
 
-        totalPrice();
+        totalQuantity();
+
       });
   });
 }
 let cart = getCart();
-
 // If cart is empty
 if (cart != 0 && cart != null) {
   getHtmlCode();
+  console.log(getCart());
+  console.log(cart);
+  //totalPrice();
 
-  totalPrice();
-
-  totalQuantity();
+  //totalQuantity();
 } else {
   console.log("panier vide");
   main.innerHTML = `<div> <p> Votre panier est vide </p> </div>`;
   cartTotal.innerText = "0";
 }
 
-
 // Post
 // Validation inputs
 const validationFinal = {
-    firstName: "",
-    lastName: "",
-    address: "",
-    city: "",
-    email: "",
+  firstName: "",
+  lastName: "",
+  address: "",
+  city: "",
+  email: "",
 };
 
 // Regex for mail name and address
 const regexEmail = /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/;
-const regexName = /^[A-Za-z]+$/;
-const regexAddress = /^[A-Za-z0-9]+$/;
-
+const regexName = /^[a-zA-ZÀ-ú\-\s]*/;
+const regexAddress = /^[a-zA-ZÀ-ú0-9\s\,\''\-]*$/;
 
 // error messages gotten from html
 const errorMessagesFirst = document.getElementById("firstNameErrorMsg");
@@ -229,35 +235,47 @@ const email = document.getElementById("email");
 
 // validation inputs
 function validationUser() {
-    const inputs = [firsName, lastName, address, city, email];
-    const errorMessages = [ // error messages gotten from html
-        errorMessagesFirst,
-        errorMessagesLast,
-        errorMessagesAddress,
-        errorMessagesCity,
-        errorMessagesEmail,
-    ];
-    const conditions = [ // conditions for validation
-        (input) => !regexName.test(input.value) || input.value.length < 2,
-        (input) => !regexName.test(input.value) || input.value.length < 2,
-        (input) => !regexAddress.test(input.value) || input.value.length < 2,
-        (input) => !regexName.test(input.value) || input.value.length < 2,
-        (input) => !regexEmail.test(input.value),
-    ];
-    inputs.forEach((input, index) => { // loop for validation
-        if (conditions[index](input)) {
-             errorMessages[index].style.display = "block";
-            validationFinal[inputs[index].name] = false;
-        }
-        else if (input.value == "") { // if input is empty
-            errorMessages[index].style.display = "block";
-            validationFinal[inputs[index].name] = false;
-        } else {
-           
-errorMessages[index].style.display = "none"; // if input is valid
-            validationFinal[inputs[index].name] = true;
-        }
-    });
+  // panier check 0
+
+  const inputs = [firsName, lastName, address, city, email];
+  const errorMessages = [
+    // error messages gotten from html
+    errorMessagesFirst,
+    errorMessagesLast,
+    errorMessagesAddress,
+    errorMessagesCity,
+    errorMessagesEmail,
+  ];
+  const conditions = [
+    // conditions for validation
+    (input) => !regexName.test(input.value) || input.value.length < 2,
+    (input) => !regexName.test(input.value) || input.value.length < 2,
+    (input) => !regexAddress.test(input.value) || input.value.length < 2,
+    (input) => !regexName.test(input.value) || input.value.length < 2,
+    (input) => !regexEmail.test(input.value),
+  ];
+  inputs.forEach((input, index) => {
+    // loop for validation
+    if (conditions[index](input)) {
+      errorMessages[index].style.display = "block";
+      validationFinal[inputs[index].name] = false;
+    } else if (input.value == "") {
+      // if input is empty
+      errorMessages[index].style.display = "block";
+      validationFinal[inputs[index].name] = false;
+    } else if (cart == 0) {
+      // if cart is empty
+      // alert("Votre panier est vide");
+      let cartEmptyMessage = document.querySelector(
+        ".cart__order__form__submit"
+      );
+      cartEmptyMessage.innerHTML = `<div> <p> Votre panier est vide </p> </div>`;
+      validationFinal[inputs[index].name] = false;
+    } else {
+      errorMessages[index].style.display = "none"; // if input is valid
+      validationFinal[inputs[index].name] = true;
+    }
+  });
 }
 
 // form button
@@ -265,55 +283,55 @@ let formSubmit = document.getElementById("order");
 
 // form submit with validation
 formSubmit.addEventListener("click", function (event) {
-    event.preventDefault();
-    validationUser() ;
-    // contact infos
-    let contact = {
-        firstName: firsName.value,
-        lastName: lastName.value,
-        address: address.value,
-        city: city.value,
-        email: email.value,
+  event.preventDefault();
+  validationUser();
+  // contact infos
+  let contact = {
+    firstName: firsName.value,
+    lastName: lastName.value,
+    address: address.value,
+    city: city.value,
+    email: email.value,
+  };
+  console.log("test2");
+  if (
+    // if all inputs are valid
+    validationFinal.firstName &&
+    validationFinal.lastName &&
+    validationFinal.address &&
+    validationFinal.city &&
+    validationFinal.email
+  ) {
+    console.log("test true validationFinal");
+    // get products id
+    const productsId = [];
+    cart.map((product) => {
+      productsId.push(product.id);
+    });
+    // order object
+    const order = {
+      contact: contact,
+      products: productsId,
     };
-    console.log("test2");
-    if ( // if all inputs are valid
-        validationFinal.firstName &&
-        validationFinal.lastName &&
-        validationFinal.address &&
-        validationFinal.city &&
-        validationFinal.email
-    ) {
-        console.log("test true validationFinal");
-        // get products id
-        const productsId = [];
-        cart.map((product) => {
-            productsId.push(product.id);
-        });
-        // order object
-        const order = {
-            'contact': contact,
-            'products': productsId,
-        };
 
-        console.log("order", JSON.stringify(order));
+    console.log("order", JSON.stringify(order));
 
-        // POST Method
-        const options = {
-            method: "POST",
-            body: JSON.stringify(order),
-            headers: { "Content-Type": "application/json" },
-        };
-        let url = "http://localhost:3000/api/products/order";
-        fetch(url, options) // fetch method
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("data", order);
-                localStorage.setItem("orderId", data.orderId);
-                document.location.href = "confirmation.html";
-            });
-    } else {
-        event.preventDefault();
-        console.log("test false validationFinal");
-        validationUser(); //display error messages
-    }
+    // POST Method
+    const options = {
+      method: "POST",
+      body: JSON.stringify(order),
+      headers: { "Content-Type": "application/json" },
+    };
+    let url = "http://localhost:3000/api/products/order";
+    fetch(url, options) // fetch method
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("data", data);
+        document.location.href = "confirmation.html";
+      });
+  } else {
+    event.preventDefault();
+    console.log("test false validationFinal");
+    validationUser(); //display error messages
+  }
 });
