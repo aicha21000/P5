@@ -1,6 +1,9 @@
-let order = localStorage.getItem("orderId");
-console.log("order", JSON.stringify(order));
-
+const params = new URLSearchParams(document.location.search);
+let order = params.get("id");
 let id = document.getElementById("orderId");
 id.innerText = order;
-// localStorage.clear();
+
+
+console.log(order);
+
+localStorage.clear();

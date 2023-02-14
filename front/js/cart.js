@@ -327,7 +327,9 @@ formSubmit.addEventListener("click", function (event) {
       .then((res) => res.json())
       .then((data) => {
         console.log("data", data);
-        document.location.href = "confirmation.html";
+        document.location.href = "confirmation.html?id=" + data.orderId;
+        return ("orderId", data.orderId);
+      
       });
   } else {
     event.preventDefault();
