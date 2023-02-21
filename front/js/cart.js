@@ -201,7 +201,7 @@ const validationFinal = {
 };
 
 // Regex for mail name and address
-const regexEmail = /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/;
+const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const regexName = /^[a-zA-ZÀ-ú\-\s]*/;
 const regexAddress = /^[a-zA-ZÀ-ú0-9\s\,\''\-]*$/;
 
