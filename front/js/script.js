@@ -14,10 +14,7 @@ function productsItems() {
         itemsAnchor.setAttribute("href", "./product.html?id=" + product._id);
 
         itemsSection.appendChild(itemsAnchor);
-        //                 itemsAnchor.onclick = () => {
 
-        //                 localStorage.setItem("product", JSON.stringify(product));
-        // }
         // create element article
         let itemsArticle = document.createElement("article");
         itemsAnchor.appendChild(itemsArticle);

@@ -18,8 +18,8 @@ function getCart() {
   }
 }
 
-// add product to cart
-function getNumberProduct() {
+
+function getNumberProduct() { // number of products
   let cart = getCart();
   let number = 0;
   for (let product of cart) {
@@ -27,10 +27,10 @@ function getNumberProduct() {
   }
   return number;
 }
-function getTotalPrice() {
+function getTotalPrice() {// total price
   let cart = getCart();
 
-  for (let product of cart) {
+  for (let product of cart) { // loop products in cart
     let totalPriceUnity = [];
     totalPriceUnity.push(product.quantity);
     console.log(totalPriceUnity);
@@ -41,16 +41,16 @@ getTotalPrice();
 //    button delete
 function deleteItem() {
   let cart = getCart(); // get cart from local storage
-  for (let k = 0; k < cart.length; k++) {
-    let cartDelete = document.querySelectorAll(".deleteItem")[k];
-    cartDelete.addEventListener("click", function () {
-      const index = cart.indexOf(cart[k]);
-      if (index > -1) {
-        cart.splice(index, 1);
-        localStorage.setItem("cart", JSON.stringify(cart));
-        cart = JSON.parse(localStorage.getItem("cart"));
+  for (let k = 0; k < cart.length; k++) { // loop products in cart
+    let cartDelete = document.querySelectorAll(".deleteItem")[k]; // get delete button
+    cartDelete.addEventListener("click", function () { // add event listener
+      const index = cart.indexOf(cart[k]); // get index of product in cart
+      if (index > -1) { // if product exists in cart
+        cart.splice(index, 1); // delete product in cart
+        localStorage.setItem("cart", JSON.stringify(cart)); // set cart in local storage
+        cart = JSON.parse(localStorage.getItem("cart")); // get cart from local storage
 
-        window.location.reload();
+        window.location.reload(); // reload page
       }
     });
   }
@@ -58,40 +58,40 @@ function deleteItem() {
 
 // Total Price
 function totalPrice() {
-  let priceNew = document.querySelectorAll(".priceNew");
+  let priceNew = document.querySelectorAll(".priceNew"); // get price
 
-  let totalPrice = 0;
-  for (const element of priceNew) {
-    let priceContent = element.textContent;
-    let priceWithoutEuros = priceContent.slice(0, -2);
-    if (Number(priceWithoutEuros)) totalPrice += parseFloat(priceWithoutEuros);
+  let totalPrice = 0; // if price is a number, add it to total price
+  for (const element of priceNew) { // loop price
+    let priceContent = element.textContent; // get price content
+    let priceWithoutEuros = priceContent.slice(0, -2); // remove €
+    if (Number(priceWithoutEuros)) totalPrice += parseFloat(priceWithoutEuros); // if price is a number, add it to total price
   }
 
-  cartTotalPrice.innerText = globalPrice;
-  console.log(priceNew);
+  cartTotalPrice.innerText = globalPrice; // display total price
+  console.log(priceNew); 
 }
 //global price variable declaration
 let globalPrice;
 
 // Change quantity
-function changeQuantity() {
-  let cart = getCart();
-  for (let i = 0; i < cart.length; i++) {
-    let buttonChangeQuantity = document.querySelectorAll(".itemQuantity")[i];
-    buttonChangeQuantity.addEventListener("change", function (e) {
+function changeQuantity() { 
+  let cart = getCart(); // get cart from local storage
+  for (let i = 0; i < cart.length; i++) { // loop products in cart
+    let buttonChangeQuantity = document.querySelectorAll(".itemQuantity")[i]; // get quantity button
+    buttonChangeQuantity.addEventListener("change", function (e) { // add event listener
       e.preventDefault();
       function changeQuantity(product, quantity) {
         let cart = getCart(); //recupere le panier
         console.log(cart);
-        let foundProduct = cart.find(
+        let foundProduct = cart.find( 
           (p) => (p.id == product.id) & (p.color == product.color)
-        ); //verifie si le produit est deja dans le panier
-        if (foundProduct != undefined) {
+        ); // find product in cart
+        if (foundProduct != undefined) { // if product exists in cart
           foundProduct.quantity = Number(buttonChangeQuantity.value);
           console.log(buttonChangeQuantity.value);
-          // window.location.reload();
-          if (foundProduct.quantity <= 0) {
-            deleteProduct(foundProduct);
+        
+          if (foundProduct.quantity <= 0) { // if quantity is 0 or less
+            deleteProduct(foundProduct); // delete product
           } else {
             saveCart(cart);
           }
@@ -108,30 +108,30 @@ function changeQuantity() {
 }
 let totalPriceUnity;
 // Total quantity
-function totalQuantity() {
-  let cart = getCart();
-  let number = 0;
-  for (let product of cart) {
-    number += product.quantity;
+function totalQuantity() { // number of products
+  let cart = getCart(); // get cart from local storage
+  let number = 0; 
+  for (let product of cart) { // loop products in cart
+    number += product.quantity; // add quantity to total quantity
   }
-  totalQuantity.innerText = number;
+  totalQuantity.innerText = number; // display total quantity
 }
 
 // Add html code on the page
-function getHtmlCode() {
-  let cart = getCart();
+function getHtmlCode() { 
+  let cart = getCart(); 
 
-  let structure = [];
-  let globalPriceArray = [];
-  cart.forEach((element) => {
-    fetch(`http://localhost:3000/api/products/${element.id}`)
+  let structure = []; // html code
+  let globalPriceArray = []; // array of price
+  cart.forEach((element) => { // loop products in cart
+    fetch(`http://localhost:3000/api/products/${element.id}`) 
       .then((res) => {
         if (res.ok) {
           return res.json();
         }
       })
-      .then((product) => {
-        let codeAll = `
+      .then((product) => { //DOM manipulation
+        let codeAll = ` 
         <article class="cart__item" data-id="${product.id}" data-color="${element.color}">
           <div class="cart__item__img">
             <img id ="itemsImg" src=${product.imageUrl} alt="">
@@ -168,7 +168,7 @@ function getHtmlCode() {
         main.innerHTML = structure;
         deleteItem();
         changeQuantity();
-        cartTotal.innerText = getNumberProduct();
+        cartTotal.innerText = getNumberProduct(); // display total quantity
 
         totalQuantity();
 
@@ -181,19 +181,17 @@ if (cart != 0 && cart != null) {
   getHtmlCode();
   console.log(getCart());
   console.log(cart);
-  //totalPrice();
-
-  //totalQuantity();
+ 
 } else {
-  console.log("panier vide");
-  main.innerHTML = `<div> <p> Votre panier est vide </p> </div>`;
-  cartTotal.innerText = "0";
+  console.log("panier vide"); // if cart is empty
+  main.innerHTML = `<div> <p> Votre panier est vide </p> </div>`; // display message
+  cartTotal.innerText = "0"; // display total quantity
 }
 
 // Post
 // Validation inputs
 const validationFinal = {
-  firstName: "",
+  firstName: "", // empty string
   lastName: "",
   address: "",
   city: "",
@@ -206,7 +204,7 @@ const regexName = /^[a-zA-ZÀ-ú\-\s]*/;
 const regexAddress = /^[a-zA-ZÀ-ú0-9\s\,\''\-]*$/;
 
 // error messages gotten from html
-const errorMessagesFirst = document.getElementById("firstNameErrorMsg");
+const errorMessagesFirst = document.getElementById("firstNameErrorMsg"); 
 errorMessagesFirst.textContent = "Veuillez introduire votre prénom !";
 errorMessagesFirst.style.display = "none";
 
@@ -227,7 +225,7 @@ errorMessagesEmail.textContent = "Veuillez introduire votre email !";
 errorMessagesEmail.style.display = "none";
 
 // form Data gotten from html
-const firsName = document.getElementById("firstName");
+const firsName = document.getElementById("firstName"); // get input from html
 const lastName = document.getElementById("lastName");
 const address = document.getElementById("address");
 const city = document.getElementById("city");
@@ -256,21 +254,18 @@ function validationUser() {
   ];
   inputs.forEach((input, index) => {
     // loop for validation
-    if (conditions[index](input)) {
+    if (conditions[index](input)) { // if input is not valid
+      errorMessages[index].style.display = "block";
+      validationFinal[inputs[index].name] = false; 
+    } else if (input.value == "") { // if input is empty
       errorMessages[index].style.display = "block";
       validationFinal[inputs[index].name] = false;
-    } else if (input.value == "") {
-      // if input is empty
-      errorMessages[index].style.display = "block";
-      validationFinal[inputs[index].name] = false;
-    } else if (cart == 0) {
-      // if cart is empty
-      // alert("Votre panier est vide");
+    } else if (cart == 0) { // if cart is empty
       let cartEmptyMessage = document.querySelector(
-        ".cart__order__form__submit"
+        ".cart__order__form__submit" // display message
       );
       cartEmptyMessage.innerHTML = `<div> <p> Votre panier est vide </p> </div>`;
-      validationFinal[inputs[index].name] = false;
+      validationFinal[inputs[index].name] = false; // if cart is empty
     } else {
       errorMessages[index].style.display = "none"; // if input is valid
       validationFinal[inputs[index].name] = true;
@@ -304,12 +299,12 @@ formSubmit.addEventListener("click", function (event) {
   ) {
     console.log("test true validationFinal");
     // get products id
-    const productsId = [];
-    cart.map((product) => {
-      productsId.push(product.id);
+    const productsId = []; // empty array
+    cart.map((product) => { // loop for products id
+      productsId.push(product.id); // push id in array
     });
     // order object
-    const order = {
+    const order = { // order object
       contact: contact,
       products: productsId,
     };
@@ -326,9 +321,9 @@ formSubmit.addEventListener("click", function (event) {
     fetch(url, options) // fetch method
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", data);
-        document.location.href = "confirmation.html?id=" + data.orderId;
-        return ("orderId", data.orderId);
+        console.log("data", data); // display data
+        document.location.href = "confirmation.html?id=" + data.orderId; // redirect to confirmation page
+        return ("orderId", data.orderId); // display order id
       
       });
   } else {
