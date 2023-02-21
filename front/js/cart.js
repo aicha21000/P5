@@ -3,7 +3,7 @@ const main = document.getElementById("cart__items");
 const cartTotal = document.getElementById("totalQuantity");
 const cartTotalPrice = document.getElementById("totalPrice");
 
-// get cart from local storage
+// save cart into local storage
 function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
@@ -27,17 +27,6 @@ function getNumberProduct() { // number of products
   }
   return number;
 }
-function getTotalPrice() {// total price
-  let cart = getCart();
-
-  for (let product of cart) { // loop products in cart
-    let totalPriceUnity = [];
-    totalPriceUnity.push(product.quantity);
-    console.log(totalPriceUnity);
-  }
-}
-getTotalPrice();
-
 //    button delete
 function deleteItem() {
   let cart = getCart(); // get cart from local storage
@@ -52,11 +41,13 @@ function deleteItem() {
 
         window.location.reload(); // reload page
       }
+      
+      
     });
   }
 }
 
-// Total Price
+// Display Total Price
 function totalPrice() {
   let priceNew = document.querySelectorAll(".priceNew"); // get price
 
@@ -89,12 +80,8 @@ function changeQuantity() {
         if (foundProduct != undefined) { // if product exists in cart
           foundProduct.quantity = Number(buttonChangeQuantity.value);
           console.log(buttonChangeQuantity.value);
-        
-          if (foundProduct.quantity <= 0) { // if quantity is 0 or less
-            deleteProduct(foundProduct); // delete product
-          } else {
             saveCart(cart);
-          }
+          
         }
       }
       changeQuantity(cart[i]);
@@ -106,7 +93,6 @@ function changeQuantity() {
     });
   }
 }
-let totalPriceUnity;
 // Total quantity
 function totalQuantity() { // number of products
   let cart = getCart(); // get cart from local storage
@@ -200,7 +186,7 @@ const validationFinal = {
 
 // Regex for mail name and address
 const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-const regexName = /^[a-zA-ZÀ-ú\-\s]*/;
+const regexName = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/;
 const regexAddress = /^[a-zA-ZÀ-ú0-9\s\,\''\-]*$/;
 
 // error messages gotten from html
@@ -246,20 +232,22 @@ function validationUser() {
   ];
   const conditions = [
     // conditions for validation
-    (input) => !regexName.test(input.value) || input.value.length < 2,
-    (input) => !regexName.test(input.value) || input.value.length < 2,
-    (input) => !regexAddress.test(input.value) || input.value.length < 2,
-    (input) => !regexName.test(input.value) || input.value.length < 2,
+    (input) => !regexName.test(input.value),
+    (input) => !regexName.test(input.value) ,
+    (input) => !regexAddress.test(input.value),
+    (input) => !regexName.test(input.value),
     (input) => !regexEmail.test(input.value),
   ];
   inputs.forEach((input, index) => {
-    // loop for validation
-    if (conditions[index](input)) { // if input is not valid
+    function errorMessage() {
       errorMessages[index].style.display = "block";
       validationFinal[inputs[index].name] = false; 
+    }
+    // loop for validation
+    if (conditions[index](input)) { // if input is not valid
+      errorMessage()
     } else if (input.value == "") { // if input is empty
-      errorMessages[index].style.display = "block";
-      validationFinal[inputs[index].name] = false;
+      errorMessage()
     } else if (cart == 0) { // if cart is empty
       let cartEmptyMessage = document.querySelector(
         ".cart__order__form__submit" // display message
